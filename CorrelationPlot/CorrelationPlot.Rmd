@@ -1,0 +1,36 @@
+---
+title: "R Functions"
+author: "Amanda McGowan"
+date: "09/04/2020"
+output: html_document
+---
+
+Correlation Plot 
+```{r}
+library(Hmisc)
+# Load in data
+temp <- read.csv("SampleData.csv")
+# Correlation matrix with p-values
+cormatp <- rcorr(as.matrix(temp), type = "pearson")
+
+# Custom color palette
+custom_color <- colorRampPalette(c("#00004B", "#1C2C75",'#38598C',	'#2B798B', '#1E9B8A',	'#85D54A',	'#FDE725', '#F9FB0E'))
+
+pdf(file = "Exercise_Pre_Corrplot.pdf") # write to pdf file (will save to working directory)
+
+# Correlation plot
+corrplot(cormatp$r,
+         p.mat = cormatp$P,
+         insig = "p-value",
+         sig.level = 0,
+         method = "circle", 
+         type = "upper",
+         tl.col = "black",
+         bg = "white",
+         col=custom_color(5),
+         diag = FALSE)
+dev.off()
+
+```
+
+
