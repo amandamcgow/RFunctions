@@ -11,12 +11,18 @@ AllFunctions is an R markdown file containing the code to all functions.
 ## Functions List 
 
 * **Chi-Square**: Computes Chi-Square. Examples with Yates' correction and without Yates' correction are provided.
-```r
-RaceChi <- matrix(c(nrow(temp1), nrow(temp2), nrow(temp3), nrow(temp4)),
-       nrow = 2,
-       dimnames = list("Race" = c("White", "Nonwhite"),
-                       "Group" = c("LowFit", "HighFit")))
+       ```r
+       RaceChi <- matrix(c(nrow(temp1), nrow(temp2), nrow(temp3), nrow(temp4)),
+              nrow = 2,
+              dimnames = list("Race" = c("White", "Nonwhite"),
+                              "Group" = c("LowFit", "HighFit")))
 
-# use Yates' correction when at least one cell of table has count < 5
-chisq.test(RaceChi)
-```
+       # use Yates' correction when at least one cell of table has count < 5
+       chisq.test(RaceChi)    
+       
+       # remove Yates' correction
+       chisq.test(RaceChi, correct = FALSE)
+
+       # remove scientific notation
+       options(scipen=999)
+       ```
