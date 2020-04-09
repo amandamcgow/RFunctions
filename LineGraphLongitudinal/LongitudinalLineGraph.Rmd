@@ -1,0 +1,43 @@
+---
+title: "LineGraphLongitudinal"
+author: "McGowan, A. L."
+date: "4/9/2020"
+output: html_document
+---
+
+
+Longitudinal Line Graph
+```{r}
+library(ggplot2)
+library(Rmisc)
+
+temp_plot <- read.csv("SampleData.csv")
+
+df <- summarySE(data = temp_plot, measurevar = "DV", groupvars = c("Mode", "Order"))
+df$Mode <- factor(df$Mode, levels = c("Control", "Exercise"), labels = c("Sedentary Instruction", "Physically Active Instruction"))
+
+# Make custom x-axis timeline
+df$Order_Standard <- rep_len(NA,nrow(df))
+df$Order_Standard[which(df$Order == 1)] <- 0
+df$Order_Standard[which(df$Order == 2)] <- 3
+df$Order_Standard[which(df$Order == 3)] <- 10
+
+ggplot(df, aes(x=Order_Standard, y=DV, color = Mode)) + 
+  geom_line(stat = "identity", size = 1, aes(linetype=Mode)) +
+  geom_errorbar(aes(ymin=DV-se, ymax=DV+se), width=0.25, size=1) +
+  scale_color_discrete(name = "Mode", labels = c("Exercise", "Control")) +
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border=element_blank(),
+        panel.background=element_blank(),
+        axis.title.x = element_text(family = "sans", colour = "black", size = 10),
+        axis.title.y = element_text(family = "sans", colour = "black", size = 10),
+        axis.text = element_text(family = "sans", colour = "black", size = 10),
+        axis.line = element_line(size = 1, linetype = "solid"), legend.position="right") +
+  scale_y_continuous(limits = c(800,1100), expand = c(0,0)) +
+  scale_x_continuous(breaks = c(0,3,10), labels = c("Pretest", "Posttest", "Recall")) +
+  xlab("Testing Period") +
+  ylab("Median Reaction Time (ms)") + 
+  scale_color_manual(values=c("#00205b", "#0db14b")) +
+ggsave('RT_by_Group_Lineplot.pdf', units="in", useDingbats=FALSE, width = 7, height = 2.5)
+```
