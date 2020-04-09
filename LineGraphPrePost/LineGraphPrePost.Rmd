@@ -1,0 +1,38 @@
+---
+title: "LineGraph_PrePost"
+author: "McGowan, A. L."
+date: "4/9/2020"
+output: html_document
+---
+
+
+Line Graph for Pre Post Designs
+```{r, fig.width=10,fig.height=5}
+
+OverallDatabase_Long <- read.csv("SampleData.csv")
+
+df <- summarySE(data = OverallDatabase_Long, measurevar = "DV", groupvars = c("Mode", "Time", "Split"))
+df$Split_f = factor(df$Split, levels = c("Massive", "Easy", "Hard"))
+
+ggplot(df, aes(x=Time, y=DV, group=Mode, color=Mode)) + 
+    geom_errorbar(aes(ymin=DV-se, ymax=DV+se), width=0.25, size=1) +
+    geom_line(aes(linetype=Mode), size=1) +
+    geom_point(aes(shape=Mode), size=2) +
+   theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border=element_blank(),
+        strip.background = element_blank(),
+        panel.background=element_blank(),
+        axis.title.x = element_text(family = "sans", colour = "black", size = 10),
+        axis.title.y = element_text(family = "sans", colour = "black", size = 10),
+        axis.text = element_text(family = "sans", colour = "black", size = 10),
+        axis.line = element_line(size = 1, linetype = "solid"), legend.position="right") +
+  scale_y_continuous(limits = c(700, 1000), expand = c(0,0)) +
+  ylab("Median Reaction Time (ms)\n") +
+  xlab(NULL) +
+  scale_color_manual(values=c("#00205b", "#0db14b")) +
+  facet_wrap(~as.factor(Split_f), nrow=1)
+rm(df)
+ggsave('RT_Split_Linegraph.pdf', units="in", useDingbats=FALSE, width = 7, height = 3)
+```
+
