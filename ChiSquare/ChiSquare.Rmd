@@ -1,0 +1,55 @@
+---
+title: "R Functions"
+author: "Amanda McGowan"
+date: "09/04/2020"
+output: html_document
+---
+
+
+Chi-Square
+```{r}
+library(readr)
+workingdatabase <- read.csv("SampleFitnessData.csv", header = TRUE)
+
+# Make factor variables
+#workingdatabase$Group <- factor(workingdatabase$Group,
+#                                levels = c(0,1),
+#                                labels = c("LowFit", "HighFit"))
+
+#workingdatabase$Race <- factor(workingdatabase$Race,
+#                               levels = c(0,1),
+#                               labels = c("White", "Nonwhite"))
+
+#workingdatabase$Sex <- factor(workingdatabase$Sex,
+#                               levels = c(0,1),
+#                               labels = c("Male", "Female"))
+
+# Are there differences in the proportion of high fit and low fit who identify as nonwhite? 
+#0 = White; 1=Nonwhite
+
+#Count HighFit Nonwhite
+temp1 <- workingdatabase[which(workingdatabase$Group==1 & workingdatabase$Race==1),]
+
+#Count HighFit White
+temp2 <- workingdatabase[which(workingdatabase$Group==1 & workingdatabase$Race==0),]
+
+#Count LowFit Nonwhite
+temp3 <- workingdatabase[which(workingdatabase$Group==0 & workingdatabase$Race==1),]
+
+#Count LowFit White
+temp4 <- workingdatabase[which(workingdatabase$Group==0 & workingdatabase$Race==0),]
+
+RaceChi <- matrix(c(nrow(temp1), nrow(temp2), nrow(temp3), nrow(temp4)),
+       nrow = 2,
+       dimnames = list("Race" = c("White", "Nonwhite"),
+                       "Group" = c("LowFit", "HighFit")))
+
+# use Yates' correction when at least one cell of table has count < 5
+chisq.test(RaceChi)
+
+# remove Yates' correction
+#chisq.test(RaceChi, correct = FALSE)
+
+options(scipen=999)
+```
+
