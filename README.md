@@ -11,6 +11,7 @@ AllFunctions is an R markdown file containing the code to all functions.
 ## Functions List 
 
 * **Chi-Square**: Computes Chi-Square. Examples with Yates' correction and without Yates' correction are provided.
+       
        ```r
        RaceChi <- matrix(c(nrow(temp1), nrow(temp2), nrow(temp3), nrow(temp4)),
               nrow = 2,
