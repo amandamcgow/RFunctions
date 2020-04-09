@@ -1,0 +1,35 @@
+---
+title: "BarGraph"
+author: "McGowan, A. L."
+date: "4/9/2020"
+output: html_document
+---
+
+Bar Graph - Numerical Distance Effect
+```{r}
+OverallDatabase_Long <- read.csv("SampleData.csv")
+
+df <- summarySE(data = OverallDatabase_Long, measurevar = "DV", groupvars = "Split")
+
+ggplot(df, aes(x = Split, y = DV, fill = Split)) + 
+  geom_bar(stat = "identity", color = "black",
+           position = position_dodge()) + 
+  geom_errorbar(aes(ymin=DV-se, ymax=DV+se), width = .2, position = position_dodge(.9)) +
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border=element_blank(),
+        panel.background=element_blank(),
+        axis.title.x = element_text(family = "sans", colour = "black", size = 10),
+        axis.title.y = element_text(family = "sans", colour = "black", size = 10),
+        axis.text = element_text(family = "sans", colour = "black", size = 10),
+        axis.line = element_line(size = 1, linetype = "solid"), legend.position="right") +
+  scale_x_discrete(limit = c("Massive", "Easy", "Hard")) +
+  ylab("Median Reaction Time (ms)\n") +
+  xlab("Numerical Ratio Between Comparisons") +
+  coord_cartesian(ylim = c(600,1000), expand = TRUE) +
+  scale_y_continuous(expand = c(0,0))+
+  scale_fill_manual(values=c("#0db14b", "#00205b", "#666666")) 
+ggsave('RT_DistanceEffect.pdf', units="in", useDingbats=FALSE, width = 7, height = 3)
+```
+
+
