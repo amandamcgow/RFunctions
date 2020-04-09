@@ -28,4 +28,33 @@ AllFunctions is an R markdown file containing the code to all functions.
        options(scipen=999)
        ```
 * **Bar Graph**: Creates bar graph and saves to PDF that can be imported into Adobe Illustrator as a vector illustration for editing. Image shown is not yet edited in Adobe Illustrator, so does not look perfect.
+
 ![](images/BarGraph.png)
+
+* **Correlation Plot**: Creates correlation plot and saves to PDF that can be imported into Adobe Illustrator as a vector illustration for editing. Image shown is not yet edited in Adobe Illustrator, so does not look perfect.
+
+![](images/CorrelationPlot.png)
+
+* **ERP Waveform Plot**: Creates plot for ERP waveform and saves to PDF that can be imported into Adobe Illustrator as a vector illustration for editing. Image shown is not yet edited in Adobe Illustrator, so does not look perfect.
+
+![](images/ERPWaveform.png)
+
+* **ERP Waveform Plot with Smoothing**: Creates plot for ERP waveforms with smoothing and saves to PDF that can be imported into Adobe Illustrator as a vector illustration for editing. Image shown is not yet edited in Adobe Illustrator, so does not look perfect.
+
+![](images/ERPWaveform_Smoothed.png)
+
+* **Line Graph for Pre Post Designs**: Creates plot for pre/post designs and saves to PDF that can be imported into Adobe Illustrator as a vector illustration for editing. Image shown is not yet edited in Adobe Illustrator, so does not look perfect.
+
+![](images/LineGraphPrePost.png)
+
+* **Line Graph for Longitudinal Designs**: Creates plot for longitudinal designs with custom spacing for x-axis and saves to PDF that can be imported into Adobe Illustrator as a vector illustration for editing. Image shown is not yet edited in Adobe Illustrator, so does not look perfect.
+
+![](images/LongitudinalLineGraph.png)
+
+* **Pupil Waveform Plot**: Creates plot for pupil waveforms and saves to PDF that can be imported into Adobe Illustrator as a vector illustration for editing. Image shown is not yet edited in Adobe Illustrator, so does not look perfect.
+
+![](images/PupilWaveform.png)
+
+* **Scatterplot**: Creates scatterplot and saves to PDF that can be imported into Adobe Illustrator as a vector illustration for editing. Image shown is not yet edited in Adobe Illustrator, so does not look perfect.
+
+![](images/Scatterplot.png)
