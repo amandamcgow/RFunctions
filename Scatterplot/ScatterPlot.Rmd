@@ -1,0 +1,43 @@
+---
+title: "Scatterplot"
+author: "McGowan, A. L."
+date: "4/9/2020"
+output: html_document
+---
+
+Scatterplot
+```{r, fig.width=7, fig.height=3}
+tryCatch(library(doBy), error=function(e){install.packages("doBy"); library(doBy)}) # load packages
+
+# Load in database
+Complete_Long <- read.csv("SampleData.csv")
+
+# Collapse across block
+tempplotdat <- summaryBy(DV ~ ID + Split + Age + Sex + Nonwhite + BodyFat + Fitness, FUN=c(mean), keep.names=TRUE, data=Complete_Long)
+tempplotdat$Split <- factor(tempplotdat$Split, levels = c("Massive", "Large", "Small"))
+tempplotdat$Sex <- as.factor(tempplotdat$Sex)
+
+# Make plot
+ggplot(tempplotdat, aes(x = Fitness, y=DV, color = Split)) +
+  geom_point(shape=16, size = 3, alpha = 0.5) +
+  geom_smooth(method=lm) +
+  facet_wrap(~Split) +
+  # theme for manuscript 
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.spacing = unit(2,"lines"),
+        panel.border=element_blank(),
+        panel.background=element_blank(),
+        strip.background = element_blank(),
+        strip.text.x = element_text(family = "sans", colour = "black", size = 12),
+        axis.title.x = element_text(family = "sans", colour = "black", size = 12),
+        axis.title.y = element_text(family = "sans", colour = "black", size = 12),
+        axis.text = element_text(family = "sans", colour = "black", size = 12),
+        axis.line = element_line(size = 1, linetype = "solid"), legend.position="none") +
+  xlab("Fitness Percentile") + 
+  ylab("Reaction Time (ms)") + 
+  scale_color_manual(values=c( "#00205b", "#e87722", "#0db14b")) + 
+  scale_y_continuous(expand = c(0, 0), limits=c(100,1400), breaks = c(200,400,600,800,1000,1200,1400)) +
+  ggsave('RTFitnessGraphbySplit.pdf', units="in", useDingbats=FALSE, width = 7, height = 3) # save to pdf
+
+```
