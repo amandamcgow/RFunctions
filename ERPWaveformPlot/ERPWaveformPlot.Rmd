@@ -1,0 +1,72 @@
+---
+title: "ERPWaveformPlot"
+author: "McGowan, A. L."
+date: "4/9/2020"
+output: html_document
+---
+
+ERP Waveform Plot
+```{r}
+# Read in database
+ERPworking <- read.csv("ERPWaveformSampleData.csv")
+
+#Plot
+ggplot(ERPworking, aes(Time, ExtraSmall_Amp, fill = Group, linetype = Group)) +
+  ggtitle("Extra Small Peak Amplitude") +
+   stat_summary(fun.y = mean,geom = "line",size = 2,aes(colour = Group)) +
+ theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.spacing = unit(2,"lines"),
+        panel.border=element_blank(),
+        panel.background=element_blank(),
+        strip.background = element_blank(),
+        axis.title.x = element_text(family = "sans", colour = "black", size = 12),
+        axis.title.y = element_text(family = "sans", colour = "black", size = 12),
+        axis.text = element_text(family = "sans", colour = "black", size = 12),
+        axis.line = element_line(size = 1, linetype = "solid"), legend.position="right") +
+  labs(x = "Time (ms)",y = expression(paste("Amplitude (",mu,"V)")),colour = "") +
+  scale_color_manual(values=c("#0db14b", "#00205b")) +
+  scale_x_continuous(breaks = c(-2500,-2000,-1500,-1000,-500,0,500,1000), expand = c(0,0), limits = c(-3000,1000)) +
+  scale_y_reverse(expand=c(0,0)) +
+  coord_cartesian(ylim = c(8, -4))
+ggsave('FitnessWaveform.pdf', units="in", useDingbats=FALSE, width = 6, height = 3) # save to pdf 
+```
+
+
+
+
+
+
+
+ERP Waveform with Smoothing
+```{r}
+# Read in database
+ERPworking <- read.csv("ERPWaveformSampleData.csv")
+
+# Subset Data
+temp <- ERPworking[which(ERPworking$Group == "Low Fit"),]
+
+# Plot All Data
+ggplot(temp, aes(Time)) +
+  ggtitle("Lower Aerobic Fitness Group") +
+   stat_smooth(fun.y = mean,geom = "line",size = 2,aes(y = temp$ExtraSmall_Amp, colour = "black"), span = 0.1, method = "loess") + #smoothing
+   stat_smooth(fun.y = mean,geom = "line",size = 2,aes(y = temp$Medium_Amp, colour = "red"), span = 0.1, method = "loess") +
+   stat_smooth(fun.y = mean,geom = "line",size = 2,aes(y = temp$Large_Amp, colour = "grey"), span = 0.1, method = "loess") +
+   stat_smooth(fun.y = mean,geom = "line",size = 2,aes(y = temp$Massive_Amp, colour = "green"), span = 0.1, method = "loess") +
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.spacing = unit(2,"lines"),
+        panel.border=element_blank(),
+        panel.background=element_blank(),
+        strip.background = element_blank(),
+        axis.title.x = element_text(family = "sans", colour = "black", size = 12),
+        axis.title.y = element_text(family = "sans", colour = "black", size = 12),
+        axis.text = element_text(family = "sans", colour = "black", size = 12),
+        axis.line = element_line(size = 1, linetype = "solid"), legend.position="right") +
+  labs(x = "Time (ms)",y = expression(paste("Amplitude (",mu,"V)")),colour = "") +
+  #scale_color_manual(values=c("#0db14b", "#00205b")) +
+scale_x_continuous(breaks = c(-2500,-2000,-1500,-1000,-500,0,500,1000), expand = c(0,0), limits = c(-3000,1000)) +
+  scale_y_reverse(expand=c(0,0)) +
+  coord_cartesian(ylim = c(8, -4)) 
+ggsave('LowFitP3AmplitudebySplit.pdf', units="in", useDingbats=FALSE, width = 6, height = 3)
+```
