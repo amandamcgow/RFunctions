@@ -1,0 +1,35 @@
+---
+title: "PupilWaveformPlot"
+author: "McGowan, A. L."
+date: "4/9/2020"
+output: html_document
+---
+
+Pupil Waveform Plot
+```{r}
+workingdatabase <- read.csv("SampleData.csv")
+
+ggplot(workingdatabase, aes(Time, Amplitude, fill = Group)) +
+  stat_summary(fun.y = mean,geom = "line",size = 2,aes(colour = Group)) +
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.spacing = unit(2,"lines"),
+        panel.border=element_blank(),
+        panel.background=element_blank(),
+        strip.background = element_blank(),
+        axis.title.x = element_text(family = "sans", colour = "black", size = 12),
+        axis.title.y = element_text(family = "sans", colour = "black", size = 12),
+        axis.text = element_text(family = "sans", colour = "black", size = 12),
+        axis.line = element_line(size = 1, linetype = "solid"), legend.position="none") +
+  labs(x = "Time (ms)",y = expression(paste("Amplitude (",mu,"m)")),colour = "") +
+  #geom_vline(xintercept = 0,linetype = "dashed" )+
+  #geom_hline(yintercept = 0,linetype = "dashed") +
+  scale_color_manual(values=c("#00205b", "#0db14b")) +
+  scale_x_continuous(breaks = c(-1000,-500, 0, 500, 1000, 1500, 2000), expand = c(0,0)) + 
+  scale_y_continuous(breaks = c(-0.05,0,0.05,0.10),expand = c(0,0)) +
+  coord_cartesian(ylim = c(-0.05, 0.10))
+  
+  #scale_y_reverse()
+
+ggsave('Pupil_Plot_Group.pdf', units="in", useDingbats=FALSE, width = 12, height = 10)
+```
