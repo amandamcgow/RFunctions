@@ -28,5 +28,4 @@ AllFunctions is an R markdown file containing the code to all functions.
        options(scipen=999)
        ```
 * **Bar Graph**: Creates bar graph and saves to PDF that can be imported into Adobe Illustrator as a vector illustration for editing. Image shown is not yet edited in Adobe Illustrator, so does not look perfect.
-
-       ![](images/BarGraph.png)
+![](images/BarGraph.png)
