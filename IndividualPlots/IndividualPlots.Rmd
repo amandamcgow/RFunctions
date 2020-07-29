@@ -1,0 +1,27 @@
+---
+title: "Time Series - Individual Plots"
+author: "McGowan, A. L."
+date: "7/28/2020"
+output: html_document
+---
+
+Individual plots in Same PDF for Time series data
+```{r}
+workingdatabase <- read.csv(SampleData.csv)
+IDlist <- unique(workingdatabase$ID)
+
+pdf("Individualplots.pdf", onefile = TRUE)
+for (i in IDlist) {
+
+  temp_plot = ggplot(data= subset(workingdatabase, ID == i)) + 
+                  geom_point(size=3, aes(x=MinutesElapsed, y=SENSSAvgMom)) +
+                  stat_smooth(method = "lm", se = FALSE, aes(x=MinutesElapsed, y=SENSSAvgMom)) +
+                  ggtitle(i)
+  #pdf(paste0(i, ".pdf"))
+  print(temp_plot)
+  #dev.off()
+  #ggsave(temp_plot, file=paste0("plot_", i,".pdf"), width = 14, height = 10, units = "cm")
+}
+dev.off()
+```
+
