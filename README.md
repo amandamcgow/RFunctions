@@ -58,3 +58,7 @@ AllFunctions is an R markdown file containing the code to all functions.
 * **Scatterplot**: Creates scatterplot and saves to PDF that can be imported into Adobe Illustrator as a vector illustration for editing. Image shown is not yet edited in Adobe Illustrator, so does not look perfect.
 
 ![](images/Scatterplot.png)
+
+* **IndividualPlots**: Creates scatterplot of time series data for each participant with lm regression line and saves each to a page in the same PDF. Helpful for exploratory graphing to determine appropriateness for growth modeling. Image shown is not yet edited in Adobe Illustrator, so does not look perfect (only shows one page, which is one participant).
+
+![](images/IndividualPlots.png)
