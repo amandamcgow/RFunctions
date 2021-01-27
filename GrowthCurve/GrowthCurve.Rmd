@@ -1,0 +1,39 @@
+---
+title: "Growth Curve Plots"
+author: "McGowan, A. L."
+date: "1/26/2021"
+output: html_document
+---
+
+Growth curve plot
+```{r}
+library(ggplot2)
+data <- read.csv("SampleData.csv")
+
+# run the growth curve model
+library(nlme)
+SSfit <- lme(fixed = SENSSAvgMom ~ 1 + NotificationNum  + NotificationNumQuad + NotificationNumCub,
+          random = ~ 1 | ID, 
+          data = data,
+          method = "ML",
+          na.action = na.exclude)
+
+ggplot(data, aes(x=NotificationNum, y=SENSSAvgMom), colour=factor(ID), group = as.factor(ID)) +
+    #geom_point(size=1) + # uncomment if want points
+    geom_smooth(aes(y = predict(SSfit,
+                              level = 1)), size = 1, method = "loess", color = "#911123", se = TRUE)  +
+  geom_smooth(method = "loess", se = FALSE, color = "#002E5C", linetype = "dashed") + # this line plots actual values
+   theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border=element_blank(),
+        panel.background=element_blank(),
+        axis.title.x = element_text(family = "sans", colour = "black", size = 10),
+        axis.title.y = element_text(family = "sans", colour = "black", size = 10),
+        axis.text = element_text(family = "sans", colour = "black", size = 10),
+        axis.line = element_line(size = 1, linetype = "solid"), legend.position="bottom") +
+  coord_cartesian(ylim = c(50,60), expand = c(0,0))  +
+  ylab("Sensation-seeking") +
+  xlab("Notification Number") 
+ggsave('SENSS_Growthcurve.pdf', units="in", useDingbats=FALSE, width = 3, height = 3)
+```
+
