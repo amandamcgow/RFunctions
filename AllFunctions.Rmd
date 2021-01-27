@@ -316,3 +316,110 @@ for (i in IDlist) {
 }
 dev.off()
 ```
+Growth curve plot
+```{r}
+library(ggplot2)
+data <- read.csv("SampleData.csv")
+
+# run the growth curve model
+library(nlme)
+SSfit <- lme(fixed = SENSSAvgMom ~ 1 + NotificationNum  + NotificationNumQuad + NotificationNumCub,
+          random = ~ 1 | ID, 
+          data = data,
+          method = "ML",
+          na.action = na.exclude)
+
+ggplot(data, aes(x=NotificationNum, y=SENSSAvgMom), colour=factor(ID), group = as.factor(ID)) +
+    #geom_point(size=1) + # uncomment if want points
+    geom_smooth(aes(y = predict(SSfit,
+                              level = 1)), size = 1, method = "loess", color = "#911123", se = TRUE)  +
+  geom_smooth(method = "loess", se = FALSE, color = "#002E5C", linetype = "dashed") + # this line plots actual values
+   theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border=element_blank(),
+        panel.background=element_blank(),
+        axis.title.x = element_text(family = "sans", colour = "black", size = 10),
+        axis.title.y = element_text(family = "sans", colour = "black", size = 10),
+        axis.text = element_text(family = "sans", colour = "black", size = 10),
+        axis.line = element_line(size = 1, linetype = "solid"), legend.position="bottom") +
+  coord_cartesian(ylim = c(50,60), expand = c(0,0))  +
+  ylab("Sensation-seeking") +
+  xlab("Notification Number") 
+ggsave('SENSS_Growthcurve.pdf', units="in", useDingbats=FALSE, width = 3, height = 3)
+```
+
+Function to make plots prettier
+```{r}
+W2E <-function(x)   {
+  cbind(which(x!=0,arr.ind=TRUE),x[x!=0])
+}
+plot_network_graph_pretty <- function(beta, var.number, title) # note the original pompom package has a built-in function that doesn't allow you to modify colors and labels
+{
+  p <- var.number
+  id <- title
+  contemporaneous.relations <- matrix(beta[(p+1):(2*p),(p+1):(2*p)], nrow = p, ncol = p, byrow = F)
+  lag.1.relations <- matrix(beta[(p+1):(2*p),1:p], nrow = p, ncol = p, byrow = F)
+  econtemporaneous <- W2E(t(contemporaneous.relations))
+  elag1 <- W2E(t(lag.1.relations))
+  plot.names <- c("Happy", "Sad", "Anxious", "Angry", "Slp Dur", "Slp Qual", "Stress", "PA")
+  # somehow if the the dimension of edge matrix is the same with var.number
+  # the edge list was recognized as edge matrix, so I am omitting the graph in this
+  if (nrow(rbind(elag1, econtemporaneous)) > var.number){
+    isLagged               <- c(rep(TRUE, nrow(elag1)), rep(FALSE, nrow(econtemporaneous)))
+    curve                  <- rep(1, length(isLagged))
+    par(mar = c(0,0,0,0))
+    qgraph(rbind(elag1, econtemporaneous),
+           layout              = "circle",
+           lty                 = ifelse(isLagged, 2, 1),
+           edge.labels         = F,
+           curve               = curve,
+           fade                = FALSE,
+           posCol              = "#0db14b", # edit the positive colour
+           negCol              = "brown2", # edit the negative colour
+           labels              = plot.names,
+           label.cex           = 1,
+           label.norm          = "0",
+           label.scale         = TRUE,
+           edge.label.cex      = 1.2,
+           edge.label.position = 0.6,
+           edge.width = 1,
+           title = id)
+  }
+  return(NULL)
+}
+```
+
+Read in database
+```{r}
+data_indiv <- read.csv("Individualdatanetworkgraph.csv")
+```
+
+Fit Model
+```{r}
+library(pompom)
+usem_indiv <- uSEM(var.number = 8, 
+               data = data_indiv[ ,c(4:9,13,14)], 
+               lag.order = 1, 
+               verbose = FALSE,
+               trim = FALSE)
+```
+
+Obtain Model Summary
+```{r}
+ms_indiv <- model_summary(model.fit = usem_indiv,
+                          var.number = 8, 
+                          lag.order = 1)
+#ms_indiv
+```
+
+Person specific network  
+```{r}
+# save to pdf
+pdf(file = "/Users/amandamcgowan/Dropbox/McGowan_Amanda_Personal/Github/RFunctions/PersonSpecificGraphs/networkgraph.pdf", width = 5, height = 5)
+
+#plot model as network
+plot_network_graph_pretty(ms_indiv$beta, var.number = 8, title = "ID#127")
+
+dev.off()
+#Red/green edges indicate negative/positive temporal relations (or coefficients). Dashed edges indicate lag-1 relations and solid edges indicate contemporaneous relations. The width of the edge indicates the absolute value of the relation.
+```
