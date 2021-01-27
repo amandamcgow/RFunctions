@@ -62,3 +62,11 @@ AllFunctions is an R markdown file containing the code to all functions.
 * **IndividualPlots**: Creates scatterplot of time series data for each participant with lm regression line and saves each to a page in the same PDF. Helpful for exploratory graphing to determine appropriateness for growth modeling. Image shown is not yet edited in Adobe Illustrator, so does not look perfect (only shows one page, which is one participant).
 
 ![](images/IndividualPlots.png)
+
+* **GrowthCurve**: Plot of growth curve model fit in nlme. Can add dashed line and points depciting actual values to compare to model fit.
+
+![](images/GrowthCurve.png)
+
+* **PersonSpecificNetworks**: Makes use of the plot_network_graph function from pompom package in R and same function in qgraph. However, the function can be edited to change aesthetics of the graph (e.g., line color, shape of nodes, etc.). Code to save the graph to a PDF to edit in Illustrator is also provided.
+
+![](images/PersonSpecificNetworks.png)
