@@ -67,6 +67,6 @@ AllFunctions is an R markdown file containing the code to all functions.
 
 ![](images/GrowthCurve.png)
 
-* **PersonSpecificNetworks**: Makes use of the plot_network_graph function from pompom package in R and same function in qgraph. However, the function can be edited to change aesthetics of the graph (e.g., line color, shape of nodes, etc.). Code to save the graph to a PDF to edit in Illustrator is also provided.
+* **PersonSpecificNetworks**: Makes use of the plot_network_graph function from pompom package in R and same function in qgraph. However, the function can be edited to change aesthetics of the graph (e.g., line color, shape of nodes, etc.). Code to save the graph to a PDF to edit in Illustrator is also provided. Green lines depict positive relationships, red lines depict negative relationships, solid lines represent contemporaneous relationships (same-day), and dashed lines represent lagged (t-1) relationships.
 
 ![](images/PersonSpecificNetworks.png)
