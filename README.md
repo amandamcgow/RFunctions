@@ -70,3 +70,18 @@ AllFunctions is an R markdown file containing the code to all functions.
 * **PersonSpecificNetworks**: Makes use of the plot_network_graph function from pompom package in R and same function in qgraph. However, the function can be edited to change aesthetics of the graph (e.g., line color, shape of nodes, etc.). Code to save the graph to a PDF to edit in Illustrator is also provided. Green lines depict positive relationships, red lines depict negative relationships, solid lines represent contemporaneous relationships (same-day), and dashed lines represent lagged (t-1) relationships.
 
 ![](images/PersonSpecificNetworks.png)
+
+* **Splitting time-varying predictors into between-person (trait) and within-person (state) components**: Function that dissaggregates within-person and between-person effects in longitudinal studies.
+*       ```r
+              # between-person split function
+              bwsplit <- function(var, ID, df){
+                centered <- var - (mean(var, na.rm=T))
+                varbw <- with(df, ave(centered, ID, FUN=function(x) mean(x, na.rm=TRUE)))
+                return(varbw)
+              }
+              # within-person split function
+              wnsplit <- function(var, ID, df){
+                varwn <- var - ave(var, ID,FUN=function(x) mean(x, na.rm=T))
+                return(varwn)
+              }
+       ```
