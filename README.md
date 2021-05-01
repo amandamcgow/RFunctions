@@ -72,7 +72,7 @@ AllFunctions is an R markdown file containing the code to all functions.
 ![](images/PersonSpecificNetworks.png)
 
 * **Splitting time-varying predictors into between-person (trait) and within-person (state) components**: Function that dissaggregates within-person and between-person effects in longitudinal studies.
-*       ```r
+       ```r
               # between-person split function
               bwsplit <- function(var, ID, df){
                 centered <- var - (mean(var, na.rm=T))
