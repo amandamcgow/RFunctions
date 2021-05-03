@@ -423,3 +423,18 @@ plot_network_graph_pretty(ms_indiv$beta, var.number = 8, title = "ID#127")
 dev.off()
 #Red/green edges indicate negative/positive temporal relations (or coefficients). Dashed edges indicate lag-1 relations and solid edges indicate contemporaneous relations. The width of the edge indicates the absolute value of the relation.
 ```
+
+#Split time-varying predictors into within and between
+```{r}
+        # between-person split function
+        bwsplit <- function(var, ID, df){
+          centered <- var - (mean(var, na.rm=T))
+          varbw <- with(df, ave(centered, ID, FUN=function(x) mean(x, na.rm=TRUE)))
+          return(varbw)
+        }
+        # within-person split function
+        wnsplit <- function(var, ID, df){
+          varwn <- var - ave(var, ID,FUN=function(x) mean(x, na.rm=T))
+          return(varwn)
+        }
+```
