@@ -1,0 +1,33 @@
+---
+title: "R Functions"
+author: "Amanda McGowan"
+date: "5.3.2021"
+output: html_document
+---
+
+
+Split predictors into within and between components
+```{r}
+# load functions
+        # between-person split function
+        bwsplit <- function(var, ID, df){
+          centered <- var - (mean(var, na.rm=T))
+          varbw <- with(df, ave(centered, ID, FUN=function(x) mean(x, na.rm=TRUE)))
+          return(varbw)
+        }
+        # within-person split function
+        wnsplit <- function(var, ID, df){
+          varwn <- var - ave(var, ID,FUN=function(x) mean(x, na.rm=T))
+          return(varwn)
+        }
+
+```
+
+Load data and perform split
+```{r}
+workingdatabase <- read.csv("SampleData.csv")
+
+workingdatabase$NegMoodbw <- bwsplit(workingdatabase$NegMood, workingdatabase$PartID, workingdatabase)
+workingdatabase$NegMoodwn <- wnsplit(workingdatabase$NegMood, workingdatabase$PartID, workingdatabase)
+```
+
