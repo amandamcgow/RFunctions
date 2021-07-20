@@ -90,6 +90,7 @@ Load the functions
 Use the functions
 ```r
 workingdatabase <- read.csv("SampleData.csv")
+                                       #variable you want to split, #ID variable, #database you're using
 workingdatabase$NegMoodbw <- bwsplit(workingdatabase$NegMood, workingdatabase$PartID, workingdatabase)
 workingdatabase$NegMoodwn <- wnsplit(workingdatabase$NegMood, workingdatabase$PartID, workingdatabase)
 ```
