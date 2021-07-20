@@ -73,6 +73,7 @@ AllFunctions is an R markdown file containing the code to all functions.
 
 * **Splitting time-varying predictors into between-person (trait) and within-person (state) components**: Function that dissaggregates within-person and between-person effects in longitudinal studies.
 
+Load the functions
        ```r
               # between-person split function
               bwsplit <- function(var, ID, df){
@@ -86,3 +87,9 @@ AllFunctions is an R markdown file containing the code to all functions.
                 return(varwn)
               }
        ```
+Use the functions
+```r
+workingdatabase <- read.csv("SampleData.csv")
+workingdatabase$NegMoodbw <- bwsplit(workingdatabase$NegMood, workingdatabase$PartID, workingdatabase)
+workingdatabase$NegMoodwn <- wnsplit(workingdatabase$NegMood, workingdatabase$PartID, workingdatabase)
+```
