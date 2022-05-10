@@ -297,6 +297,7 @@ ggplot(workingdatabase, aes(Time, Amplitude, fill = Group)) +
 
 ggsave('Pupil_Plot_Group.pdf', units="in", useDingbats=FALSE, width = 12, height = 10)
 ```
+
 Individual plots in Same PDF for Time series data
 ```{r}
 workingdatabase <- read.csv(SampleData.csv)
@@ -316,6 +317,7 @@ for (i in IDlist) {
 }
 dev.off()
 ```
+
 Growth curve plot
 ```{r}
 library(ggplot2)
@@ -324,17 +326,17 @@ data <- read.csv("SampleData.csv")
 # run the growth curve model
 library(nlme)
 SSfit <- lme(fixed = SENSSAvgMom ~ 1 + NotificationNum  + NotificationNumQuad + NotificationNumCub,
-          random = ~ 1 | ID, 
-          data = data,
-          method = "ML",
-          na.action = na.exclude)
+             random = ~ 1 | ID, 
+             data = data,
+             method = "ML",
+             na.action = na.exclude)
 
 ggplot(data, aes(x=NotificationNum, y=SENSSAvgMom), colour=factor(ID), group = as.factor(ID)) +
-    #geom_point(size=1) + # uncomment if want points
-    geom_smooth(aes(y = predict(SSfit,
+  #geom_point(size=1) + # uncomment if want points
+  geom_smooth(aes(y = predict(SSfit,
                               level = 1)), size = 1, method = "loess", color = "#911123", se = TRUE)  +
   geom_smooth(method = "loess", se = FALSE, color = "#002E5C", linetype = "dashed") + # this line plots actual values
-   theme(panel.grid.major = element_blank(),
+  theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         panel.border=element_blank(),
         panel.background=element_blank(),
@@ -398,10 +400,10 @@ Fit Model
 ```{r}
 library(pompom)
 usem_indiv <- uSEM(var.number = 8, 
-               data = data_indiv[ ,c(4:9,13,14)], 
-               lag.order = 1, 
-               verbose = FALSE,
-               trim = FALSE)
+                   data = data_indiv[ ,c(4:9,13,14)], 
+                   lag.order = 1, 
+                   verbose = FALSE,
+                   trim = FALSE)
 ```
 
 Obtain Model Summary
@@ -424,17 +426,62 @@ dev.off()
 #Red/green edges indicate negative/positive temporal relations (or coefficients). Dashed edges indicate lag-1 relations and solid edges indicate contemporaneous relations. The width of the edge indicates the absolute value of the relation.
 ```
 
-#Split time-varying predictors into within and between
+
+Split time-varying predictors into within and between
 ```{r}
-        # between-person split function
-        bwsplit <- function(var, ID, df){
-          centered <- var - (mean(var, na.rm=T))
-          varbw <- with(df, ave(centered, ID, FUN=function(x) mean(x, na.rm=TRUE)))
-          return(varbw)
-        }
-        # within-person split function
-        wnsplit <- function(var, ID, df){
-          varwn <- var - ave(var, ID,FUN=function(x) mean(x, na.rm=T))
-          return(varwn)
-        }
+# between-person split function
+bwsplit <- function(var, ID, df){
+  centered <- var - (mean(var, na.rm=T))
+  varbw <- with(df, ave(centered, ID, FUN=function(x) mean(x, na.rm=TRUE)))
+  return(varbw)
+}
+# within-person split function
+wnsplit <- function(var, ID, df){
+  varwn <- var - ave(var, ID,FUN=function(x) mean(x, na.rm=T))
+  return(varwn)
+}
 ```
+
+Install required packages
+```{r}
+tryCatch(library(ggplot2), error=function(e){install.packages("ggplot2"); library(ggplot2)})
+tryCatch(library(gganimate), error=function(e){install.packages("gganimate"); library(gganimate)})
+```
+
+
+Load data
+```{r}
+working <- read.csv("data.csv", stringsAsFactors = FALSE) # edit this to load your data
+```
+
+Make plot & animate - this will output in console depending on your settings
+```{r}
+library(ggplot2) 
+library(gganimate)
+
+#plotting intraindividual change 
+ggplot(data = working,
+       aes(x = Day, group= PartID)) +
+  #first variable
+  geom_line(aes(y=PhysAct), color="#fde725") + # yellow
+  geom_line(aes(y=SlpDur), color="#dce319") + # light green
+  geom_line(aes(y=SlpQ), color="#B8DE29") + #
+  geom_line(aes(y=Sad), color="#c2df23") + #light green
+  geom_line(aes(y=Anx), color="#21918c") + # indigo
+  geom_line(aes(y=Ang), color="#38588c") + # dark blue
+  geom_line(aes(y=Hap), color="#440154") + # purple 
+  theme_classic() +
+  theme(axis.title=element_text(size=14),
+        axis.text=element_text(size=14),
+        plot.title=element_text(size=14, hjust=.5)) +
+  scale_x_continuous(limits = c(0,28), breaks=c(0,2,4,6,8,10,12,14,16,18,20,22,24,26,28)) +
+  ylab("Magnitude") +
+  transition_reveal(Day)
+anim_save("~/Box Sync/AmandaPASleepCOVID/PlotGif.gif")
+#ggsave('~/Box Sync/AmandaPASleepCOVID/Variabilityplot_uconnvid.pdf', units="in", useDingbats=FALSE, width = 5, height = 3)
+```
+
+
+
+
+
