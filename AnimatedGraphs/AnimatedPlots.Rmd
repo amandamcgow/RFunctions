@@ -1,0 +1,48 @@
+---
+title: "Making Animated Graphs"
+author: "A.L. McGowan"
+date: "10/27/2021"
+output: html_document
+---
+
+Install required packages
+```{r}
+tryCatch(library(ggplot2), error=function(e){install.packages("ggplot2"); library(ggplot2)})
+tryCatch(library(gganimate), error=function(e){install.packages("gganimate"); library(gganimate)})
+```
+
+
+Load data
+```{r}
+working <- read.csv("data.csv", stringsAsFactors = FALSE) # edit this to load your data
+```
+
+Make plot & animate - this will output in console depending on your settings
+```{r}
+library(ggplot2) 
+library(gganimate)
+
+#plotting intraindividual change 
+ggplot(data = working,
+       aes(x = Day, group= PartID)) +
+  #first variable
+  geom_line(aes(y=PhysAct), color="#fde725") + # yellow
+  geom_line(aes(y=SlpDur), color="#dce319") + # light green
+  geom_line(aes(y=SlpQ), color="#B8DE29") + #
+  geom_line(aes(y=Sad), color="#c2df23") + #light green
+  geom_line(aes(y=Anx), color="#21918c") + # indigo
+  geom_line(aes(y=Ang), color="#38588c") + # dark blue
+  geom_line(aes(y=Hap), color="#440154") + # purple 
+  theme_classic() +
+  theme(axis.title=element_text(size=14),
+        axis.text=element_text(size=14),
+        plot.title=element_text(size=14, hjust=.5)) +
+  scale_x_continuous(limits = c(0,28), breaks=c(0,2,4,6,8,10,12,14,16,18,20,22,24,26,28)) +
+  ylab("Magnitude") +
+transition_reveal(Day)
+anim_save("~/Box Sync/AmandaPASleepCOVID/PlotGif.gif")
+#ggsave('~/Box Sync/AmandaPASleepCOVID/Variabilityplot_uconnvid.pdf', units="in", useDingbats=FALSE, width = 5, height = 3)
+```
+
+
+
