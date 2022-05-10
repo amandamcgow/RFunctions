@@ -94,3 +94,8 @@ workingdatabase <- read.csv("SampleData.csv")
 workingdatabase$NegMoodbw <- bwsplit(workingdatabase$NegMood, workingdatabase$PartID, workingdatabase)
 workingdatabase$NegMoodwn <- wnsplit(workingdatabase$NegMood, workingdatabase$PartID, workingdatabase)
 ```
+
+
+* **Animate Graphs to make GIF**: Use of gganimate package to animate graphs and save GIF for use in presentations.
+
+! [](images/PlotGif.gif)
