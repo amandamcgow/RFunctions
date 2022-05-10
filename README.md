@@ -98,4 +98,4 @@ workingdatabase$NegMoodwn <- wnsplit(workingdatabase$NegMood, workingdatabase$Pa
 
 * **Animate Graphs to make GIF**: Use of gganimate package to animate graphs and save GIF for use in presentations.
 
-! [](images/PlotGif.gif)
+![](images/PlotGIF.gif)
