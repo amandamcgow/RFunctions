@@ -99,3 +99,30 @@ workingdatabase$NegMoodwn <- wnsplit(workingdatabase$NegMood, workingdatabase$Pa
 * **Animate Graphs to make GIF**: Use of gganimate package to animate graphs and save GIF for use in presentations.
 
 ![](images/PlotGif.gif)
+
+* **Make prompt, day-level prompt, and day variables for experience-sampling time series data**: Example code to use in data frame to make variables for time series analyses. Requres lubridate package in R.
+
+```{r}
+# Set date format
+ABCD_prompt$Notification.Time <- lubridate::ymd_hms(ABCD_prompt$Notification.Time)
+
+# Make Date column
+ABCD_prompt$Date <- lubridate::as_date(ABCD_prompt$Notification.Time)
+
+# sort by ID and Date
+ABCD_prompt <- ABCD_prompt[order(ABCD_prompt$ID, ABCD_prompt$Date),]
+
+# Make prompt variable
+ABCD_prompt$Prompt <- ave(as.character(ABCD_prompt$ID), as.character(ABCD_prompt$ID), FUN=seq_along)
+
+#Make DayPrompt (e.g., there are 10 prompts/day and we want 1-10 for each day for certain analyses)
+ABCD_prompt$DayPrompt <- ave(as.character(ABCD_prompt$Date), as.character(ABCD_prompt$Date), FUN=seq_along)
+
+# this makes day variable: we want each 1-10 to be labelled as Day 1, day 2, etc…)
+ABCD_prompt$Day <- ave(as.character(ABCD_prompt$DayPrompt), as.character(ABCD_prompt$DayPrompt), FUN=seq_along)
+
+# Check
+#ABCD_check <- ABCD_prompt[,c("ID", "Notification.Time", "Date", "Prompt", "DayPrompt", "Day")]
+
+```
+![](images/PlotEMAvars.png)
